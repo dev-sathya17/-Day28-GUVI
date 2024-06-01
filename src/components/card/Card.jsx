@@ -1,23 +1,30 @@
 import { useState } from "react";
 import "./Card.css";
 import { useTotal } from "../../contexts/TotalContext";
-const Card = ({ data, prices }) => {
+const Card = ({ data, prices, handleRender }) => {
   const [quantity, setQuantity] = useState(1);
+  const [pricesData, _] = useState(prices);
   const { setTotal } = useTotal();
+
   const handleChange = (e, id) => {
     if (quantity !== "") setQuantity(parseInt(e.target.value));
 
-    prices[id].quantity = parseInt(e.target.value);
-
-    updateTotal();
+    pricesData[id].quantity = parseInt(e.target.value);
+    UpdateTotal(pricesData);
   };
 
-  const updateTotal = () => {
+  const UpdateTotal = (prices) => {
     let total = 0;
     for (let price in prices) {
       total += prices[price].price * prices[price].quantity;
     }
     setTotal(total);
+  };
+
+  const handleClick = (id) => {
+    delete pricesData[id];
+    UpdateTotal(pricesData);
+    handleRender(id);
   };
 
   return (
@@ -44,7 +51,9 @@ const Card = ({ data, prices }) => {
         </div>
         <div className="amount">
           <h3>${!isNaN(data.price * quantity) ? data.price * quantity : ""}</h3>
-          <span className="btn">REMOVE</span>
+          <span className="btn" onClick={() => handleClick(data.id)}>
+            REMOVE
+          </span>
         </div>
       </div>
     </div>

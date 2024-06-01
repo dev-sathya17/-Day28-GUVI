@@ -11,7 +11,7 @@ export const TotalProvider = ({ children }) => {
       return accumulator + value.price;
     }, 0);
     setTotal(newTotal);
-  }, [products]);
+  }, []);
 
   return (
     <TotalContext.Provider value={{ total, setTotal }}>
