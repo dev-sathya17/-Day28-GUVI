@@ -1,5 +1,25 @@
+import { useState } from "react";
 import "./Card.css";
-const Card = ({ data }) => {
+import { useTotal } from "../../contexts/TotalContext";
+const Card = ({ data, prices }) => {
+  const [quantity, setQuantity] = useState(1);
+  const { setTotal } = useTotal();
+  const handleChange = (e, id) => {
+    if (quantity !== "") setQuantity(parseInt(e.target.value));
+
+    prices[id].quantity = parseInt(e.target.value);
+
+    updateTotal();
+  };
+
+  const updateTotal = () => {
+    let total = 0;
+    for (let price in prices) {
+      total += prices[price].price * prices[price].quantity;
+    }
+    setTotal(total);
+  };
+
   return (
     <div className="card">
       <div className="product">
@@ -14,10 +34,16 @@ const Card = ({ data }) => {
       </div>
       <div className="price-container">
         <div className="quantity">
-          <input type="number" className="quantity-input" value={1} />
+          <input
+            type="number"
+            className="quantity-input"
+            min={1}
+            value={quantity}
+            onChange={(e) => handleChange(e, data.id)}
+          />
         </div>
         <div className="amount">
-          <h3>${data.price}</h3>
+          <h3>${!isNaN(data.price * quantity) ? data.price * quantity : ""}</h3>
           <span className="btn">REMOVE</span>
         </div>
       </div>

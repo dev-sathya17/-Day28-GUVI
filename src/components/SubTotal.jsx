@@ -1,6 +1,8 @@
+import { useTotal } from "../contexts/TotalContext";
 import "./components.css";
 
 const SubTotal = () => {
+  const { total } = useTotal();
   return (
     <>
       <div className="sub-total">
@@ -9,7 +11,7 @@ const SubTotal = () => {
           <h4>SHIPPING :</h4>
         </div>
         <div className="sub-amount">
-          <h3>$1000</h3>
+          <h3>${total}</h3>
           <h4>FREE</h4>
         </div>
       </div>
